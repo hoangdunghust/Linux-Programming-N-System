@@ -1,0 +1,5 @@
+Khi mở một file với cờ O_APPEND, con trỏ ghi (write pointer) sẽ tự động được di chuyển đến cuối file mỗi khi bạn ghi dữ liệu vào file. Điều này có nghĩa là dữ liệu mới luôn được ghi vào cuối file, bất kể bạn có sử dụng lệnh lseek() để di chuyển con trỏ file hay không.
+
+lseek(fd, 0, SEEK_SET) sẽ đưa con trỏ đọc/ghi của file về đầu file.
+
+Tuy nhiên, khi bạn sử dụng cờ O_APPEND khi mở file, lseek() không có tác dụng vì cờ O_APPEND luôn giữ cho con trỏ ghi ở cuối file, bất chấp bất kỳ thay đổi nào từ lseek().
