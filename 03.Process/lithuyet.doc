@@ -1,0 +1,13 @@
+bt1
+Lý thuyết nền tảng:
+Process (tiến trình): Là một chương trình đang chạy. Mỗi tiến trình có mã định danh riêng gọi là PID.
+
+fork(): Là hàm trong C dùng để tạo ra một tiến trình con từ tiến trình hiện tại (gọi là tiến trình cha).
+
+Khi fork() được gọi:
+
+Nó sao chép tiến trình hiện tại.
+
+Trả về 0 trong tiến trình con.
+
+Trả về PID của tiến trình con trong tiến trình cha.

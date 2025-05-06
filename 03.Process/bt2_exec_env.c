@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
+int main() {
+    // Lấy biến môi trường ENV_ACTION
+    char *env = getenv("ENV_ACTION");
+
+    if (env == NULL) {
+        printf("Không tìm thấy biến môi trường ENV_ACTION.\n");
+        return 1;
+    }
+
+    // In ra tiến trình hiện tại trước khi exec
+    printf("PID trước khi exec: %d\n", getpid());
+
+    if (strcmp(env, "1") == 0) {
+        execlp("ls", "ls", "-l", NULL);
+    } else if (strcmp(env, "2") == 0) {
+        execlp("date", "date", NULL);
+    } else {
+        printf("ENV_ACTION không hợp lệ. Dùng 1 cho ls hoặc 2 cho date.\n");
+        return 1;
+    }
+
+    // Nếu exec thành công, dòng sau sẽ không bao giờ chạy
+    perror("exec thất bại");
+    return 1;
+}
