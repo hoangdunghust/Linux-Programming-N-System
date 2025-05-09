@@ -10,9 +10,7 @@ Lấy thông tin của file (kích thước, thời gian sửa đổi, loại fi
  1.
  open(): Mở file, trả về file descriptor (fd) – một số nguyên đại diện cho file.
 
-c
-Copy
-Edit
+
 int fd = open("filename.txt", O_WRONLY | O_APPEND | O_CREAT, 0644);
 O_WRONLY: Mở để ghi.
 

@@ -1,0 +1,15 @@
+# File thực thi
+main
+
+# File object
+*.o
+
+# Thư viện tĩnh
+*.a
+
+# Thư viện động
+*.so
+
+# Tệp sao lưu hoặc swap của trình soạn thảo (như vim)
+*~
+*.swp

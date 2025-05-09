@@ -1,3 +1,68 @@
+﻿Các loại tiến trình trong hệ điều hành Linux
+Trong hệ điều hành Linux, tiến trình có thể được phân loại theo nhiều cách khác nhau dựa trên trạng thái, mối quan hệ với các tiến trình khác, hoặc các đặc tính của chúng. Dưới đây là các loại tiến trình phổ biến mà bạn sẽ gặp trong lập trình hệ thống:
+
+1. Tiến trình bình thường (Normal Process)
+Đây là loại tiến trình thông thường mà bạn sẽ gặp khi chạy bất kỳ chương trình nào.
+Các tiến trình này được tạo ra bằng cách gọi fork() và có thể thực thi lệnh hoặc chương trình mà chúng đại diện.
+Mỗi tiến trình có một PID (Process ID) và PPID (Parent Process ID) để xác định sự liên kết giữa chúng.
+Ví dụ:
+ps -ef
+Khi bạn chạy một ứng dụng, như gcc hay vim, một tiến trình mới sẽ được sinh ra và hoạt động bình thường.
+
+2. Tiến trình Cha (Parent Process)
+Tiến trình cha là tiến trình gọi fork() để tạo ra các tiến trình con.
+Tiến trình cha có thể theo dõi hoặc tương tác với tiến trình con.
+Khi tiến trình cha kết thúc, nó có thể đợi tiến trình con kết thúc thông qua hàm wait().
+Ví dụ:
+Khi bạn mở một terminal và chạy một chương trình, terminal chính sẽ là tiến trình cha.
+
+3. Tiến trình Con (Child Process)
+Tiến trình con được tạo ra khi tiến trình cha gọi fork().
+Tiến trình con có một PID riêng, nhưng PPID (Parent Process ID) của nó là PID của tiến trình cha.
+Tiến trình con có thể thực thi chương trình khác (ví dụ: sử dụng exec()).
+Sau khi tiến trình con kết thúc, nó có thể tạo thành zombie process nếu tiến trình cha không thu thập trạng thái kết thúc của nó.
+
+4. Tiến trình Zombie
+Zombie process là tiến trình đã hoàn thành công việc của mình (hoặc bị terminated) nhưng vẫn tồn tại trong bảng tiến trình của hệ điều hành vì tiến trình cha chưa thu thập thông tin kết thúc.
+Zombie không thực thi bất kỳ mã nào nữa, nhưng nó vẫn chiếm giữ PID và resource của hệ thống.
+Zombie thường xuất hiện khi tiến trình cha không gọi wait() để thu thập trạng thái kết thúc của tiến trình con.
+Ví dụ:
+Khi bạn chạy chương trình con và tiến trình cha thoát trước khi tiến trình con hoàn thành, bạn có thể nhìn thấy một tiến trình zombie khi chạy:
+ps aux | grep 'Z'
+
+5. Tiến trình Orphan
+Orphan process là tiến trình con mà cha của nó đã thoát nhưng chính nó vẫn tiếp tục hoạt động.
+Sau khi tiến trình cha kết thúc, tiến trình con sẽ được adopted bởi tiến trình init (hoặc systemd trong các hệ thống mới hơn), tiến trình này sẽ tiếp quản và quản lý các tiến trình orphan.
+Tiến trình orphan có thể tiếp tục chạy mà không bị ảnh hưởng bởi tiến trình cha đã chết.
+Ví dụ:
+Khi bạn khởi động một tiến trình con, và tiến trình cha của nó đột ngột thoát trong khi tiến trình con vẫn đang chạy, tiến trình con sẽ trở thành orphan.
+
+6. Tiến trình Foreground và Background
+Foreground Process: Là tiến trình chạy trong nền tảng chính, và bạn tương tác trực tiếp với nó thông qua terminal. Bạn sẽ phải đợi tiến trình này hoàn thành trước khi có thể thực hiện một lệnh khác.
+Ví dụ:
+ls -l
+Background Process: Là tiến trình chạy trong nền, không chiếm quyền điều khiển terminal. Bạn có thể tiếp tục thực hiện các lệnh khác trong khi tiến trình này vẫn đang chạy.
+Để chạy một tiến trình ở nền, bạn chỉ cần thêm dấu & vào cuối lệnh:
+./my_program &
+
+7. Daemon Process
+Daemon là tiến trình chạy ở chế độ nền và không tương tác với người dùng trực tiếp. Daemon thường bắt đầu khi hệ thống khởi động và duy trì suốt thời gian hệ thống hoạt động.
+Chúng thường được sử dụng để thực hiện các công việc nền như phục vụ HTTP, gửi email, hoặc xử lý các tác vụ định kỳ.
+Daemon thường có tên kết thúc bằng chữ d, ví dụ sshd (SSH Daemon), httpd (HTTP Daemon).
+Ví dụ:
+Daemon trên hệ thống thường có thể được quản lý qua systemd hoặc init.
+
+8. Tiến trình Trái ngược (Cooperative Process)
+Là loại tiến trình mà một tiến trình phải tự ngừng để cho phép tiến trình khác thực thi.
+Loại này không phổ biến nữa vì preemptive multitasking (chạy đồng thời) hiện đại cho phép hệ điều hành tự động chia sẻ thời gian xử lý giữa các tiến trình mà không cần sự hợp tác từ các tiến trình.
+
+9. Tiến trình Inter-process Communication (IPC)
+Đây không phải là một loại tiến trình mà là một cách để các tiến trình tương tác với nhau.
+Các phương thức giao tiếp giữa tiến trình (IPC) bao gồm semaphore, message queues, shared memory, và pipes.
+Điều này rất quan trọng khi nhiều tiến trình cần chia sẻ dữ liệu hoặc điều khiển lẫn nhau.
+
+💡 Tóm tắt các loại tiến trình:
+Loại Tiến TrìnhMô TảVí DụBình thườngTiến trình thông thườngMột chương trình đang chạy (như gcc, vim,...)ChaTiến trình gọi fork() để tạo tiến trình conTerminal mở một tiến trình khi bạn chạy lệnhConTiến trình được tạo ra từ tiến trình chaTiến trình con của terminalZombieTiến trình đã hoàn thành nhưng không được thu thậpKhi tiến trình con đã hoàn thành nhưng không được waitOrphanTiến trình con không có chaKhi cha của tiến trình con đã chếtForegroundTiến trình chiếm quyền điều khiển terminalLệnh ls, catBackgroundTiến trình chạy ở chế độ nền./my_program &DaemonTiến trình nền, không tương tác với người dùngsshd, httpdCooperativeTiến trình phải hợp tác với tiến trình khácTương tác giữa tiến trình cũ và mớiIPCGiao tiếp giữa các tiến trìnhShared memory, semaphores, message queues, pipes
 bt1
 Lý thuyết nền tảng:
 Process (tiến trình): Là một chương trình đang chạy. Mỗi tiến trình có mã định danh riêng gọi là PID.
@@ -11,3 +76,22 @@ Nó sao chép tiến trình hiện tại.
 Trả về 0 trong tiến trình con.
 
 Trả về PID của tiến trình con trong tiến trình cha.
+Bt2
+1. Hàm exec là gì?
+exec là nhóm hàm (execl, execlp, execvp, execv,...) dùng để thay thế tiến trình hiện tại bằng một chương trình khác.
+Khi exec được gọi thành công, tiến trình hiện tại bị xóa, và thay vào đó là chương trình mới chạy trong cùng PID.
+
+HàmÝ nghĩa đặc biệtexeclpChạy bằng tên chương trình và tìm trong $PATHexecvpNhư trên, nhưng nhận mảng tham số
+2. Biến môi trường:
+Là các giá trị lưu trong hệ thống mà tiến trình có thể đọc bằng getenv().
+Ví dụ: bạn có thể đặt ENV_ACTION=1 để điều khiển chương trình thực hiện lệnh tương ứng.
+ Bt3
+1. Tín hiệu trong Linux là gì?
+• Tín hiệu (signal) là một dạng giao tiếp giữa các tiến trình trong Linux, được sử dụng để thông báo cho một tiến trình biết rằng có một sự kiện đã xảy ra.
+• Ví dụ: bạn nhấn Ctrl+C, hệ thống gửi tín hiệu SIGINT đến tiến trình đang chạy.
+• Có nhiều tín hiệu chuẩn: SIGKILL, SIGTERM, SIGINT, SIGUSR1, SIGUSR2, ...
+Bt4 
+HàmMục đíchfork()Tạo tiến trình conexit(status)Cho con kết thúc với mã sốwait(&status)Cho cha đợi con và nhận trạng tháiWIFEXITED(status)Kiểm tra xem con có kết thúc bình thường khôngWEXITSTATUS(status)Lấy mã thoát của tiến trình con
+Bt5
+Lý thuyết: Tiến trình Zombie & Orphan
+LoạiGiải thíchZombie 🧟Tiến trình con đã kết thúc nhưng cha chưa gọi wait() để thu dọn => vẫn chiếm entry trong bảng tiến trìnhOrphan 👻Tiến trình con còn sống nhưng cha đã chết => con sẽ được init (PID 1) nhận nuôi
