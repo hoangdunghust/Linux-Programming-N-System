@@ -12,7 +12,7 @@ int main() {
     const char *data = "This is a test file for BT3.\n";
 
     // Mở file (O_CREAT tạo mới nếu chưa có, O_WRONLY chỉ ghi, O_TRUNC ghi đè lên nội dung cũ)
-    int fd = open(filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+    int fd = open(filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
     if (fd == -1) {
         perror("open");
         exit(1);
