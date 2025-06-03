@@ -1,0 +1,19 @@
+# Ignore object files
+*.o
+
+# Ignore executable files (tên binary, ví dụ bt1, main,...)
+bt1
+bt2
+bt3
+bt4
+bt5
+bt6
+main
+go
+run
+# Ignore editor temp files
+*~
+*.swp
+
+# Ignore build directories (nếu có)
+build/

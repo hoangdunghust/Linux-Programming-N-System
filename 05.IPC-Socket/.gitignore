@@ -1,0 +1,16 @@
+# Bỏ qua các file thực thi
+*.o
+*.out
+run1
+run2
+
+# Bỏ qua thư mục build (nếu có)
+build/
+
+# Bỏ qua các file tạm hoặc backup
+*~
+*.swp
+.DS_Store
+
+# Bỏ qua các file logs
+*.log
